@@ -1,0 +1,56 @@
+#This analysis utilized the following Fortune 500 dataset:
+
+CREATE TABLE fortune_companies (
+    company_id INTEGER PRIMARY KEY,
+    company_name TEXT,
+    industry TEXT,
+    revenue REAL,
+    employees INTEGER,
+    healthcare_benefits BIT,
+    paid_time_off_days INTEGER,
+    maternity_leave_weeks INTEGER,
+    avg_employee_tenure REAL
+
+# Which companies have a total revunue of 400 billion or more?
+
+SELECT company_name,SUM(revenue)as total_revenue
+FROM fortune_companies
+GROUP BY company_name
+HAVING total_revenue>=400;
+
+# Which industry has the most employees?
+
+SELECT industry,MAX(employees) as total_employees
+FROM fortune_companies
+GROUP BY industry
+ORDER BY employees asc;
+
+#Which tech company has the least revenue?
+
+SELECT company_name,min(revenue)
+FROM fortune_companies
+WHERE industry="Technology";
+
+#Which company has the highest and lowest employee retention?
+
+SELECT company_name,
+CASE
+WHEN avg_employee_tenure>5 THEN "high tenure"
+WHEN avg_employee_tenure<5 THEN "low tenure"
+END as employee_retention
+FROM fortune_companies;
+
+#Whcih industry has has an average revenue of 200 billion or more?
+
+SELECT industry,ROUND(AVG(revenue),1) as avg_revenue_billions
+FROM fortune_companies
+GROUP BY industry
+HAVING avg_revenue_billions>=200;
+
+#Which industry has a minimum revenue of 200 billion or less?
+
+SELECT industry,ROUND(min(revenue),1) as min_revenue_billions
+FROM fortune_companies
+GROUP BY industry
+HAVING min_revenue_billions<=200;
+
